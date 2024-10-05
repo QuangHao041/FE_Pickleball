@@ -1,0 +1,83 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .logo {
+    margin-left: 60px;
+  }
+  
+  .logo img {
+    width: 55px;
+    height: 55px;
+  }
+  
+  .nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+  }
+  
+  .nav-links li {
+    margin: 1rem;
+    font-weight: bold;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: black;
+  }
+  
+  .auth-buttons, .user-section {
+    display: flex;
+    align-items: center;
+  }
+  
+  .login-button, .register-button, .post-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-left: 0.5rem;
+  }
+  
+  .login-button {
+    background-color: #0056b3;
+    color: white;
+  }
+  
+  .register-button {
+    background-color: white;
+    border: 1px solid #0056b3;
+    color: #0056b3;
+  }
+  
+  .post-button {
+    background-color: #0056b3;
+    color: white;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+    margin-left: 0.5rem;
+  }
+
+  .user-info img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+  }
+  
+  .profile-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+  }
+  

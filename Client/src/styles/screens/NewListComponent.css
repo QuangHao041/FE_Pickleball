@@ -1,0 +1,36 @@
+.news-list {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .news-cards {
+    display: flex;
+    gap: 20px;
+    overflow-x: scroll;
+  }
+  
+  .news-card {
+    width: 280px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  
+  .news-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .news-image {
+    width: 100%;
+    height: 160px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+  
+  .news-info {
+    padding: 15px;
+    text-align: left;
+  }
+  

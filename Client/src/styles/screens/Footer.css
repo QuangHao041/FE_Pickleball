@@ -1,0 +1,92 @@
+/* src/Footer.css */
+
+.footer {
+    background: linear-gradient(90deg, #005bea, #00c6fb);
+    color: white;
+    padding: 40px 20px;
+    font-family: Arial, sans-serif;
+  }
+
+  .head-footer {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .logo {
+    flex: 1;
+    max-width: 250px;
+  }
+  
+  .logo h1 {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  .logo p {
+    margin: 5px 0 0;
+    font-size: 14px;
+  }
+  
+  .links {
+    display: flex;
+    flex: 2;
+    justify-content: space-around;
+  }
+  
+  .links div {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .links h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  
+  .links p {
+    margin: 0;
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
+  
+  .contact {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 200px;
+    text-align: center;
+  }
+  
+  .contact p {
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  .social-icons {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+  }
+  
+  .social-icons a {
+    color: white;
+    text-decoration: none;
+    border: 1px solid white;
+    padding: 5px;
+    border-radius: 50%;
+    font-size: 16px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
