@@ -7,51 +7,45 @@ import { FaFacebook } from "react-icons/fa";
 const Footer = () => {
   return (
     <footer className="footer">
-      <div>
-        <div className="head-footer">
-          <div className="logo">
-            <h1>LOGO</h1>
-            <p>Trang đặt sân Pickleball uy tín ở Việt Nam</p>
-          </div>
-          <div className="contact">
-            <p>Liên hệ với chúng tôi qua:</p>
-            <div className="social-icons">
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaFacebook />
-              </a>
-              <a
-                href="https://zalo.me"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Z
-              </a>
-            </div>
+      <div className="footer-container">
+        <div className="head-footer ">
+          <div className="logo-footer">
+            <h1><a style={{ color: 'white', fontWeight: 'bold', textDecoration: 'none' }} href="/"> Ji Ji Ball </a> </h1>
+            <p>Phục vụ những nhu cầu thiết yếu của cộng đồng PICKLEBALL</p>
           </div>
         </div>
-        <div>
+        <div className="text-link ">
           <div className="links">
-            <div>
+            <div className="link-info">
               <h4>Về chúng tôi</h4>
-              <p>Điều khoản</p>
-              <p>Chính sách bảo mật thông tin cá nhân</p>
-            </div>
-            <div>
-              <h4>Hỗ trợ khách hàng</h4>
-              <p>Sử dụng tài khoản</p>
-              <p>Cách thức hoạt động</p>
+              <p>Giới thiệu</p>
+              <p>Hướng dẫn sử dụng</p>
               <p>Phản hồi, góp ý</p>
             </div>
-            <div>
-
+            <div className="link-info">
               <h4>Hợp tác và liên kết</h4>
               <p>
                 Cùng JIJI Pickleball phát triển cộng đồng Pickleball tại Việt Nam
               </p>
+              <div className="contact">
+                <h4>Liên hệ với chúng tôi qua:</h4>
+                <div className="social-icons" id="social-icons">
+                  <a
+                    href="https://web.facebook.com/profile.php?id=61566880312514"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <FaFacebook />
+                  </a>
+                  <a
+                    href="https://zalo.me"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Zalo
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>

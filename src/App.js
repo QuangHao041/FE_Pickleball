@@ -27,10 +27,15 @@ import CourtLayout from './layouts/CourtLayout';
 import CourtDetailLayout from './layouts/CourtDetailLayout';
 import PostFormLayout from './layouts/PostFormLayout';
 import CoachLayout from './layouts/CoachLayout';
+import DashboardLayout from './layouts/DashboardLayout';
+import Admin from './layouts/Admin';
+import CourtRegistrationList from './components/CourtRegistrationList';
+import { NotificationProvider } from './components/NotificationContext';
 
 function App() {
   return (
     <div className='App'>
+      <NotificationProvider>
       <Router>
         <Routes>
           <Route path="/register" element={<AuthLayout><Register /></AuthLayout>} />
@@ -44,9 +49,13 @@ function App() {
           <Route path="/court/court-detail" element={<CourtDetailLayout />} />
           <Route path="/post-form" element={<PostFormLayout />} />
           <Route path="/coach" element={<CoachLayout />} />
+          <Route path="/dashboard" element={<DashboardLayout />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/court-registration-list" element={<CourtRegistrationList />} />
           <Route path="/" element={<HomeLayout></HomeLayout>} />
         </Routes>
       </Router>
+      </NotificationProvider>
 
       {/* <HomeComponent />
       <CourtComponent name="Sân 286 Nguyễn Xiên" price="100.000" slots="6" location="Hà Nội" />

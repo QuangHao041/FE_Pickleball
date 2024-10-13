@@ -128,6 +128,19 @@ const Register = () => {
                   <FaPhone />
                 </div>
                 <input
+                  type="email"
+                  placeholder="Nhập email"
+                  className="input"
+                  name='email'
+                  id='email'
+                  onChange={handleChange}
+                  value={formData.phone} />
+              </div>
+              <div className="input-group">
+                <div className="icon-wrapper">
+                  <FaPhone />
+                </div>
+                <input
                   type="tel"
                   placeholder="Nhập số điện thoại"
                   className="input"

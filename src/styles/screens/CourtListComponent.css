@@ -7,4 +7,14 @@
     text-align: center;
     margin-bottom: 20px;
   }
+
+  #body-court {
+    margin: 0 10%;
+  }
+
   
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }

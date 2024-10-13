@@ -13,13 +13,29 @@ const Login = () => {
   const handleLoginClick = async () => {
     try {
       const response = await axios.post('https://bepickleball.vercel.app/api/auth/login', {
-        phone: username,
+        username: username,
         password: password,
       });
-
+  
       if (response.status === 200) {
-        // Điều hướng tới trang khác nếu đăng nhập thành công
-        navigate('/');
+        const { token, user } = response.data;
+  
+        // Save token and user information to localStorage
+        localStorage.setItem('token', token);
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('name', user.username); // You can also save email or any other details
+        localStorage.setItem('avatar', user.avatar || ''); // Handle case where avatar might be missing
+        localStorage.setItem('role', user.role); // Save role
+  
+        // Redirect based on role
+        if (user.role === 'player') {
+          // Do not show "Đăng Bài Tìm Giao Lưu" button
+          navigate('/');
+        } else if (user.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/'); // default behavior
+        }
       } else {
         setError('Đăng nhập thất bại. Vui lòng thử lại.');
       }
@@ -51,7 +67,7 @@ const Login = () => {
             <input
               type="text"
               className="input"
-              placeholder="Số điện thoại"
+              placeholder="Tên đăng nhập"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required

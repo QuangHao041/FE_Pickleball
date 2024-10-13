@@ -1,16 +1,26 @@
 .home-component {
-    display: flex;
+  display: flex;
+  color: #f0f0f0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 55vh;
+  background-color: #f0f0f0;
+  background-image: url("../../../public/assets/images/slide.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.home-component p {
     color: #f0f0f0;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 55vh;
-    background-color: #f0f0f0;
-    background-image: url("../../../public/assets/images/slide.png");
-    background-size: cover;
-    background-position: center;
 }
 
 .home-component.coach-home {
-    height: 60vh; 
-  }
+  height: 60vh;
+}
+
+@media (max-width: 430px) {
+    .home-component {
+        height: 30vh;
+    }
+}

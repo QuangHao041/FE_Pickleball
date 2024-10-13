@@ -2,15 +2,22 @@ import React from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { FaMapMarkerAlt, FaUserFriends, FaClipboardList, FaUsers } from 'react-icons/fa';
 import '../styles/screens/ParticipationComponent.css'; // Add necessary styles here
+import { useNavigate } from 'react-router-dom';
 
 const ParticipationComponent = () => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/court');
+  }
+
   return (
     <div className="participation-section">
-      <h2 className="text-center" style={{fontWeight: "bold"}}>Tham gia giao lưu</h2>
-      <div className="participation-content">
+      <h2 className="text-center">Tham gia giao lưu</h2>
+      <Row className="participation-content">
         {/* Left Section */}
-        <div className="left-section w-60">
-          <h4>Đến với chúng tôi bạn sẽ được <span className="highlight">trải nghiệm!</span></h4>
+        <Col md={7} className="left-section">
+          <h4>Đến với chúng tôi bạn sẽ được <span className="highlight">trải nghiệm !</span></h4>
           <div className="feature-list">
             <div className="feature-item">
               <FaMapMarkerAlt className="icon" />
@@ -41,10 +48,10 @@ const ParticipationComponent = () => {
               </div>
             </div>
           </div>
-        </div>
+        </Col>
 
         {/* Right Section */}
-        <div className="right-section w-40">
+        <Col md={5} className="right-section">
           <div className="image-container">
             <img
               src={process.env.PUBLIC_URL + '/assets/images/banner.png'}
@@ -53,11 +60,11 @@ const ParticipationComponent = () => {
             />
             <div className="image-content">
               <h2 style={{textAlign: "left"}}>Đừng bỏ lỡ cơ hội thử sức với môn thể thao đang được yêu thích này!</h2>
-              <button className="participation-button button">Tham gia giao lưu ngay</button>
+              <button className="participation-button button" onClick={() => window.location.href = '/court'}>Tham gia giao lưu ngay</button>
             </div>
           </div>
-        </div>
-      </div>
+        </Col>
+      </Row>
     </div>
   );
 };

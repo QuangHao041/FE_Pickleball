@@ -1,0 +1,19 @@
+.court-registration-list {
+    padding: 20px;
+  }
+  
+  .card img {
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .pagination {
+    margin-top: 20px;
+  }
+  

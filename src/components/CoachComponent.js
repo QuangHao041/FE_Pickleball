@@ -2,7 +2,7 @@ import React from 'react';
 import { FaFacebook, FaPhoneAlt, FaUserTie } from 'react-icons/fa';
 import '../styles/screens/CoachComponent.css'; // Custom CSS for card styling
 
-const CoachComponent = ({ name, price, level, phone, image }) => {
+const CoachComponent = ({ name, price, level, phone, image, contact }) => {
   return (
     <div className="card coach-card">
       {/* Image at the top */}
@@ -19,11 +19,11 @@ const CoachComponent = ({ name, price, level, phone, image }) => {
           {price} VND/buổi
         </p>
 
-        <p className="card-text level-text" style={{marginBottom: 0}}>
+        <p className="card-text level-text" style={{ marginBottom: 0 }}>
           <FaUserTie /> Trình độ: {level}
         </p>
 
-        
+
 
         <p className="card-text">
           <FaPhoneAlt /> SĐT: {phone}
@@ -32,13 +32,21 @@ const CoachComponent = ({ name, price, level, phone, image }) => {
         {/* Contact buttons: Facebook and Zalo */}
         <div className="row contact-buttons">
           <div className="col">
-            <button className="btn btn-outline-primary contact-btn" style={{color: "#3b5998" , backgroundColor: "white", borderColor: "#3b5998"}}>
-              <FaFacebook /> <a style={{ color: "black"}}>Facebook</a>
+            <button className="btn btn-outline-primary contact-btn" style={{ color: "#3b5998", backgroundColor: "white", borderColor: "#3b5998" }}>
+              <FaFacebook /> {contact?.facebook && (
+                <a style={{ color: "black", textDecoration: "none" }} href={contact.facebook} target="_blank" rel="noopener noreferrer">
+                  Facebook
+                </a>
+              )}
             </button>
           </div>
           <div className="col">
-            <button className="btn btn-outline-primary contact-btn" style={{color: "white", backgroundColor: "#3b5998", borderColor: "#3b5998"}}>
-              <FaPhoneAlt /> <a style={{ color: "white"}}>Zalo</a>
+            <button className="btn btn-outline-primary contact-btn" style={{ color: "white", backgroundColor: "#3b5998", borderColor: "#3b5998" }}>
+              <FaPhoneAlt />  {contact?.zalo && (
+                <a href={`https://zalo.me/${phone}`} target="_blank" rel="noopener noreferrer" style={{ marginLeft: '5px', color: "white", textDecoration: "none" }}>
+                  Zalo
+                </a>
+              )}
             </button>
           </div>
         </div>

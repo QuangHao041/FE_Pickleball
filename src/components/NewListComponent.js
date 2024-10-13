@@ -7,7 +7,7 @@ const newsList = [
     id: 1,
     title: "Review sân Pickleball tại đường 286 Nguyễn Xiển xem thực hư...",
     date: "03 tháng 08 năm 2024",
-    imageUrl:  process.env.PUBLIC_URL + '/assets/images/new1.png', // replace with actual image paths
+    imageUrl:  process.env.PUBLIC_URL + '/assets/images/new1.png',
     description: "Sân chơi Pickleball Nguyễn Xiển...."
   },
   {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Button, Row, Col } from 'react-bootstrap';
-import { FaMapMarkerAlt, FaUsers } from 'react-icons/fa';
+import { CiLocationOn } from "react-icons/ci";
+import { PiUserRectangleLight  } from "react-icons/pi";
 import { useNavigate } from 'react-router-dom';
 import '../styles/screens/CourtComponent.css'; // Import custom CSS
 
@@ -29,7 +30,7 @@ const CourtComponent = ({ name, price, slots, location, type, level, image, appl
   };
 
   return (
-    <Card className="court-card" onClick={handleCardClick} style={{ textAlign: "center" }}>
+    <Card className="court-card" onClick={handleCardClick}>
       <div className="top-left-badge">
         {type === 'có mái che' ? 'Sân có mái che' : 'Sân không có mái che'}
       </div>
@@ -38,26 +39,34 @@ const CourtComponent = ({ name, price, slots, location, type, level, image, appl
         {displayedLevel}
       </div>
 
-      <Card.Img
+      {/* <Card.Img
         variant="top"
         src={image}
         alt={`Court ${name}`}
         className="card-image"
+      /> */}
+      <div
+        className="card-image"
+        style={{
+          backgroundImage: `url(${image})`,
+        }}
+        alt={`Court ${name}`}
       />
+
 
       <Card.Body style={{ padding: "0px", margin: "8px", marginBottom: "0px", marginRight: "0px" }}>
         <Card.Title className="court-name">{name}</Card.Title>
 
         <Card.Text className="price-text" style={{ marginTop: "10px" }}>
-          {price} VND/người
+          {price.toLocaleString('vi-VN')} VND /người
         </Card.Text>
 
         <Row style={{ padding: "0px", margin: "0px", marginBottom: "10px" }}>
-          <Col className="location" md={7} style={{ padding: "0px", textAlign: "left" }}>
-            <FaMapMarkerAlt /> {location}
+          <Col className="location" md={7}>
+            <CiLocationOn /> {location}
           </Col>
-          <Col className="slots-text" md={5} style={{ padding: "0px ", textAlign: "right", fontWeight: "10px" }}>
-            <FaUsers /> {slots}/8 người
+          <Col className="slots-text" md={5}>
+            <PiUserRectangleLight /> {slots}/8 người
           </Col>
         </Row>
       </Card.Body>

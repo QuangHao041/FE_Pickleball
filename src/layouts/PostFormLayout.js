@@ -8,7 +8,6 @@ const PostFormLayout = () => {
     <div>
       <Header />
       <main>
-        <h1>Tạo bài giao lưu</h1>
         <PostFormComponent />
       </main>
       <Footer />
