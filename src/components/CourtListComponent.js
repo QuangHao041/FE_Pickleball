@@ -53,10 +53,10 @@ const CourtListComponent = ({ filteredResults }) => {
             {currentCourts.map((court) => (
               <Col key={court._id} md={3} style={{ padding: 0 }}>
                 <CourtComponent
-                  name={court.court_address}
+                  name={court.court_name}
                   price={court.cost}
                   slots={court.total_players}
-                  location={court.court_address}
+                  location={court.court_name}
                   type={court.court_type}
                   level={parseFloat(court.skill_level)}
                   image={court.images[0]}

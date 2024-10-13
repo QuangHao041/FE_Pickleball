@@ -174,7 +174,7 @@ const PostFormComponent = () => {
                       type="radio"
                       label="Sân Không Có Mái Che"
                       name="courtType"
-                      value="Sân Không Có Mái Che"
+                      value="Sân không có mái che"
                       onChange={handleInputChange}
                     />
                     <Form.Check

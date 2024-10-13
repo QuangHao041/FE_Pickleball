@@ -32,7 +32,7 @@ const CourtComponent = ({ name, price, slots, location, type, level, image, appl
   return (
     <Card className="court-card" onClick={handleCardClick}>
       <div className="top-left-badge">
-        {type === 'có mái che' ? 'Sân có mái che' : 'Sân không có mái che'}
+        {type === 'có mái che' ? 'Sân Có Mái Che' : 'Sân không có mái che'}
       </div>
 
       <div className="top-right-badge">
