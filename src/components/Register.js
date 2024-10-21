@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { FaUser, FaPhone, FaLock, FaRedo, FaArrowLeft } from 'react-icons/fa';
+import { FaUser, FaPhone, FaLock, FaRedo, FaArrowLeft, FaMailBulk } from 'react-icons/fa';
 import '../styles/bootstraps/custom_bootstrap.css';
 import '../styles/screens/Register.css';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { MdEmail } from "react-icons/md";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -77,7 +78,8 @@ const Register = () => {
 
       console.log(data);
       toast.success("Đăng ký thành công!");
-
+      
+      navigate('/login');
     } catch (error) {
       console.log("Error: ", error);
       toast.error("Đã xảy ra lỗi, vui lòng thử lại sau!");
@@ -125,7 +127,7 @@ const Register = () => {
               </div>
               <div className="input-group">
                 <div className="icon-wrapper">
-                  <FaPhone />
+                  <MdEmail />
                 </div>
                 <input
                   type="email"
@@ -134,7 +136,7 @@ const Register = () => {
                   name='email'
                   id='email'
                   onChange={handleChange}
-                  value={formData.phone} />
+                  value={formData.email} />
               </div>
               <div className="input-group">
                 <div className="icon-wrapper">

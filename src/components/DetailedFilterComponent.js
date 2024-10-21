@@ -1,108 +1,143 @@
 import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css'; // Import CSS của DatePicker
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import '../styles/screens/DetailedFilterComponent.css';
 
 const DetailedFilterComponent = ({ setFilteredResults, allCourts }) => {
   const [filters, setFilters] = useState({
     location: '',
+    otherLocation: '',
     startTime: '',
     level: '',
     courtType: '',
     numPeople: '',
-    otherLocation: '', // Thêm trường cho tuỳ chọn "Other"
+    playDate: null, // Thay đổi giá trị khởi tạo
   });
 
-  const [showOther, setShowOther] = useState(false); // Trạng thái cho việc hiển thị "Other"
+  const [showOther, setShowOther] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === 'location' && value === 'Other') {
-      setShowOther(true); // Hiển thị trường Other nếu chọn "Other"
+    if (name === 'location' && value.toLowerCase() === 'other') {
+      setShowOther(true);
     } else if (name === 'location') {
-      setShowOther(false); // Ẩn trường Other nếu chọn khác
-      setFilters({ ...filters, otherLocation: '' }); // Xoá giá trị Other khi chọn khác
+      setShowOther(false);
+      setFilters({ ...filters, otherLocation: '' });
     }
 
-    setFilters({ ...filters, [name]: value });
+    const normalizedValue = capitalizeFirstLetter(value);
+    const updatedFilters = { ...filters, [name]: normalizedValue };
+    setFilters(updatedFilters);
+
+    // Gọi hàm lọc ngay khi giá trị thay đổi
+    filterResults(updatedFilters);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleDateChange = (date) => {
+    const updatedFilters = { ...filters, playDate: date };
+    setFilters(updatedFilters);
+    filterResults(updatedFilters); // Gọi hàm lọc
+  };
+
+  const capitalizeFirstLetter = (str) => {
+    return str
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
+  const filterResults = (updatedFilters) => {
+    const formattedPlayDate = updatedFilters.playDate
+      ? new Date(updatedFilters.playDate).toLocaleDateString('vi-VN')
+      : '';
 
     const filteredResults = allCourts.filter(court => {
-      // Lọc theo địa điểm
-      const locationFilter = filters.location === 'Other'
-        ? court.court_address.includes(filters.otherLocation)
-        : filters.location
-        ? court.court_address.includes(filters.location)
+      const locationFilter = updatedFilters.location === 'Other'
+        ? court.court_name && court.court_name.toLowerCase().includes(updatedFilters.otherLocation.toLowerCase())
+        : updatedFilters.location
+          ? court.court_name && court.court_name.toLowerCase().includes(updatedFilters.location.toLowerCase())
+          : true;
+
+      const otherLocationFilter = updatedFilters.otherLocation
+        ? court.court_name && court.court_name.toLowerCase().includes(updatedFilters.otherLocation.toLowerCase())
         : true;
 
-      // Lọc theo giờ chơi
-      const startTimeFilter = filters.startTime
-        ? court.play_time.split(' - ')[0] === filters.startTime // So sánh giờ bắt đầu
+      const startTimeFilter = updatedFilters.startTime
+        ? court.play_time === updatedFilters.startTime
         : true;
 
-      // Lọc theo trình độ
-      const levelFilter = filters.level
-        ? parseFloat(court.skill_level) === parseFloat(filters.level)
+      const levelFilter = updatedFilters.level
+        ? court.skill_level && court.skill_level.includes(updatedFilters.level)
         : true;
 
-      // Lọc theo loại sân
-      const courtTypeFilter = filters.courtType
-        ? court.court_type.includes(filters.courtType)
+      const courtTypeFilter = updatedFilters.courtType
+        ? court.court_type && court.court_type.includes(updatedFilters.courtType)
         : true;
 
-      // Lọc theo số lượng người chơi
-      
+      const playDateFilter = formattedPlayDate
+        ? court.play_date === formattedPlayDate
+        : true;
+
       return (
         locationFilter &&
+        otherLocationFilter &&
         startTimeFilter &&
         levelFilter &&
-        courtTypeFilter 
+        courtTypeFilter &&
+        playDateFilter
       );
     });
 
-    setFilteredResults(filteredResults); // Cập nhật danh sách sau khi lọc
+    setFilteredResults(filteredResults);
   };
 
   const handleReset = () => {
     setFilters({
       location: '',
+      otherLocation: '',
       startTime: '',
       level: '',
       courtType: '',
       numPeople: '',
-      otherLocation: '',
+      playDate: null // Thay đổi giá trị khởi tạo
     });
-    setShowOther(false); // Ẩn "Other" khi reset
-    setFilteredResults(allCourts); // Hiển thị lại tất cả sân khi reset bộ lọc
+    setShowOther(false);
+    setFilteredResults(allCourts);
   };
 
   return (
     <div className="detailed-filter">
-      <Form onSubmit={handleSubmit}>
+      <Form>
         <Row className="g-2">
           <Col xs="auto" className="me-1">
             <Form.Group controlId="formLocation">
               <Form.Control
-                as="select"
+                type='text'
+                placeholder='Nhập thành phố'
                 name="location"
                 value={filters.location}
                 onChange={handleInputChange}
                 className="form-control-sm"
-              >
-                <option value="">Địa điểm</option>
-                <option value="Hồ Chí Minh">Hồ Chí Minh</option>
-                <option value="Hà Nội">Hà Nội</option>
-                <option value="Hải Phòng">Hải Phòng</option>
-                <option value="Other">Other</option> {/* Tuỳ chọn Other */}
-              </Form.Control>
+              />
             </Form.Group>
           </Col>
 
-          {/* Hiển thị trường nhập tuỳ chọn "Other" khi được chọn */}
-          {showOther && (
+          <Col xs="auto" className="me-1">
+            <Form.Group controlId="formOtherLocation">
+              <Form.Control
+                type="text"
+                placeholder="Quận huyện (nếu cần)"
+                name="otherLocation"
+                value={filters.otherLocation}
+                onChange={handleInputChange} // Kích hoạt tìm kiếm ngay lập tức
+                className="form-control-sm"
+              />
+            </Form.Group>
+          </Col>
+
+          {/* {showOther && (
             <Col xs="auto" className="me-1">
               <Form.Group controlId="formOtherLocation">
                 <Form.Control
@@ -115,17 +150,40 @@ const DetailedFilterComponent = ({ setFilteredResults, allCourts }) => {
                 />
               </Form.Group>
             </Col>
-          )}
+          )} */}
+
+          <Col xs="auto" className="me-1">
+            <Form.Group controlId="formPlayDate">
+              <DatePicker
+                selected={filters.playDate}
+                onChange={handleDateChange}
+                placeholderText="Ngày chơi" // Placeholder
+                className="form-control form-control-sm"
+                dateFormat="dd/MM/yyyy" // Định dạng ngày
+              />
+            </Form.Group>
+          </Col>
 
           <Col xs="auto" className="me-1">
             <Form.Group controlId="formStartTime">
               <Form.Control
-                type="time"
+                as="select"
                 name="startTime"
                 value={filters.startTime}
                 onChange={handleInputChange}
                 className="form-control-sm"
-              />
+              >
+                <option value="">Chọn giờ</option>
+                {Array.from({ length: 48 }, (_, i) => {
+                  const hour = String(Math.floor(i / 2)).padStart(2, '0');
+                  const minute = i % 2 === 0 ? '00' : '30';
+                  return (
+                    <option key={i} value={`${hour}:${minute}`}>
+                      {`${hour}:${minute}`}
+                    </option>
+                  );
+                })}
+              </Form.Control>
             </Form.Group>
           </Col>
 
@@ -162,7 +220,7 @@ const DetailedFilterComponent = ({ setFilteredResults, allCourts }) => {
               >
                 <option value="">Loại sân</option>
                 <option value="Sân Có Mái Che">Có mái che</option>
-                <option value="Sân không Có Mái Che">Không có mái che</option>
+                <option value="Sân không có mái che">Không có mái che</option>
               </Form.Control>
             </Form.Group>
           </Col>

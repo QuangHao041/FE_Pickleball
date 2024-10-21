@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../styles/screens/CategoriesSidebar.css'; // Add your custom styles if necessary
 
 const CategoriesSidebar = ({ onCategorySelect }) => {
-  const categories = ['Bài giao lưu', 'Huấn luyện viên'];
+  const categories = ['Bài giao lưu', 'Huấn luyện viên', 'Xem Huấn luyện viên'];
 
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
 

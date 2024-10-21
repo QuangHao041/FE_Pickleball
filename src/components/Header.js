@@ -60,7 +60,8 @@ const Header = () => {
   const toggleNotifications = () => {
     setNotificationsOpen(!notificationsOpen);
   }
-
+  console.log(avatar);
+  
   return (
     <header className="header">
       <div className="logo">
@@ -97,11 +98,6 @@ const Header = () => {
         ) : null}
       </ul>
 
-      {/* Nút thông báo */}
-      <button className="notification-icon" onClick={toggleNotifications}>
-        <FaBell size={24} />
-      </button>
-
       {/* Bảng thông báo */}
       {notificationsOpen && (
         <div className={`notification-dropdown ${notificationsOpen ? 'open' : ''}`}>
@@ -121,9 +117,10 @@ const Header = () => {
         <div className="user-section">
           <div className="user-info">
             <img
-              src={avatar ? avatar : process.env.PUBLIC_URL + '/assets/images/user1.png'}
+              src={avatar }
               alt="User Avatar"
               className="image"
+              onClick={toggleNotifications}
             />
             <span>{name}</span>
           </div>

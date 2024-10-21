@@ -17,13 +17,13 @@ const CoachLayout = () => {
   };
 
   return (
-    <div style={{backgroundColor: "#F0F0F0"}}>
+    <div style={{ backgroundColor: "#F0F0F0" }}>
       <Header />
       <HomeComponent />
       {/* Truyền hàm handleSearch cho TrainerSearchFilter */}
       <TrainerSearchFilter onSearch={handleSearch} />
-      {/* Truyền searchFilters cho CoachListComponent */}
-      <CoachListComponent searchFilters={searchFilters} />
+      {/* Truyền searchFilters và bật phân trang cho CoachListComponent */}
+      <CoachListComponent searchFilters={searchFilters} limit={Infinity} enablePagination={true} />
       <Footer />
     </div>
   );

@@ -24,8 +24,9 @@ const Login = () => {
         localStorage.setItem('token', token);
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('name', user.username); // You can also save email or any other details
-        localStorage.setItem('avatar', user.avatar || ''); // Handle case where avatar might be missing
+        localStorage.setItem('avatar', user.avatar); // Handle case where avatar might be missing
         localStorage.setItem('role', user.role); // Save role
+        localStorage.setItem('_id', user._id);
   
         // Redirect based on role
         if (user.role === 'player') {
@@ -44,6 +45,12 @@ const Login = () => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleLoginClick();
+    }
+  };
+
   const handleBackButton = () => {
     navigate('/');
   };
@@ -56,10 +63,6 @@ const Login = () => {
             <FaArrowLeft />
           </button>
           <h2>Đăng nhập</h2>
-          <button className="facebook-button">
-            <FaFacebook /> Đăng nhập bằng Facebook
-          </button>
-          <p className="subtitle1">Hoặc</p>
           <div className="input-group" style={{borderRadius: "20px"}}>
             <div className="icon-wrapper">
               <FaUser />
@@ -70,6 +73,7 @@ const Login = () => {
               placeholder="Tên đăng nhập"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              onKeyDown={handleKeyDown} // Thêm sự kiện này cho input username
               required
             />
           </div>
@@ -83,6 +87,7 @@ const Login = () => {
               placeholder="Mật khẩu"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={handleKeyDown} // Thêm sự kiện này cho input password
               required
             />
           </div>

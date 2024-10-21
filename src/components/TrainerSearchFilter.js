@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import '../styles/screens/TrainerSearchFilter.css'; // Ensure to create this CSS file for custom styles
 
-const TrainerSearchFilter = ({ allCourts, setFilteredResults }) => {
+const TrainerSearchFilter = ({ onSearch }) => {
   const [filters, setFilters] = useState({
     location: '',
     level: '',
@@ -11,119 +11,69 @@ const TrainerSearchFilter = ({ allCourts, setFilteredResults }) => {
 
   const [showOther, setShowOther] = useState(false); // Trạng thái cho việc hiển thị "Other"
 
+  const capitalizeFirstLetter = (str) => {
+    return str
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    
+    // Chuyển đổi giá trị nhập vào thành chữ thường
+    const normalizedValue = capitalizeFirstLetter(value);
 
-    if (name === 'location' && value === 'Other') {
+    if (name === 'location' && normalizedValue === 'other') {
       setShowOther(true); // Hiển thị trường Other nếu chọn "Other"
     } else if (name === 'location') {
       setShowOther(false); // Ẩn trường Other nếu chọn khác
       setFilters({ ...filters, otherLocation: '' }); // Xoá giá trị Other khi chọn khác
     }
-
-    setFilters({ ...filters, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const filteredResults = allCourts.filter(court => {
-      // Lọc theo địa điểm
-      const locationFilter = filters.location === 'Other'
-        ? court.court_address.includes(filters.otherLocation)
-        : filters.location
-        ? court.court_address.includes(filters.location)
-        : true;
-
-      // Lọc theo trình độ
-      const levelFilter = filters.level
-        ? parseFloat(court.skill_level) === parseFloat(filters.level)
-        : true;
-
     
-      return (
-        locationFilter &&
-        levelFilter
-      );
-    });
+    // Cập nhật giá trị bộ lọc và kích hoạt tìm kiếm
+    const updatedFilters = { ...filters, [name]: normalizedValue }; // Sử dụng normalizedValue
+    setFilters(updatedFilters);
 
-    setFilteredResults(filteredResults); // Cập nhật danh sách sau khi lọc
+    // Kích hoạt tìm kiếm ngay khi có thay đổi
+    onSearch(updatedFilters);
   };
 
   const handleReset = () => {
-    setFilters({
-      location: '',
-      level: '',
-      otherLocation: '',
-    });
-    setShowOther(false); // Ẩn "Other" khi reset
-    setFilteredResults(allCourts); // Hiển thị lại tất cả sân khi reset bộ lọc
+    const resetFilters = { location: '', level: '', otherLocation: '' };
+    setFilters(resetFilters);
+    setShowOther(false);
+    onSearch(resetFilters); // Reset filters in parent
   };
 
   return (
     <div className="detailed-filter">
-      <Form onSubmit={handleSubmit}>
+      <Form>
         <Row className="g-2">
           <Col xs="auto" className="me-1">
             <Form.Group controlId="formLocation">
               <Form.Control
-                as="select"
+                type='text'
+                placeholder='Nhập thành phố'
                 name="location"
                 value={filters.location}
-                onChange={handleInputChange}
+                onChange={handleInputChange} // Kích hoạt tìm kiếm ngay lập tức
                 className="form-control-sm"
-              >
-                <option value="">Địa điểm</option>
-                <option value="Hồ Chí Minh">Hồ Chí Minh</option>
-                <option value="Hà Nội">Hà Nội</option>
-                <option value="Hải Phòng">Hải Phòng</option>
-                <option value="Other">Other</option> {/* Tuỳ chọn Other */}
-              </Form.Control>
+              />
             </Form.Group>
           </Col>
 
-          {/* Hiển thị trường nhập tuỳ chọn "Other" khi được chọn */}
-          {showOther && (
-            <Col xs="auto" className="me-1">
-              <Form.Group controlId="formOtherLocation">
-                <Form.Control
-                  type="text"
-                  placeholder="Nhập địa điểm khác"
-                  name="otherLocation"
-                  value={filters.otherLocation}
-                  onChange={handleInputChange}
-                  className="form-control-sm"
-                />
-              </Form.Group>
-            </Col>
-          )}
-
           <Col xs="auto" className="me-1">
-            <Form.Group controlId="formLevel">
+            <Form.Group controlId="formOtherLocation">
               <Form.Control
-                as="select"
-                name="level"
-                value={filters.level}
-                onChange={handleInputChange}
+                type="text"
+                placeholder="Quận huyện (nếu có)"
+                name="otherLocation"
+                value={filters.otherLocation}
+                onChange={handleInputChange} // Kích hoạt tìm kiếm ngay lập tức
                 className="form-control-sm"
-              >
-                <option value="">Trình độ</option>
-                <option value="<2.0">1.0 - 2.0 (Newbie)</option>
-                <option value="2.5">2.5</option>
-                <option value="3.0">3.0</option>
-                <option value="3.5">3.5</option>
-                <option value="4.0">4.0</option>
-                <option value="4.5">4.5</option>
-                <option value="5.0">5.0</option>
-                <option value="5.5+">5.5+</option>
-              </Form.Control>
+              />
             </Form.Group>
-          </Col>
-
-          <Col xs="auto" className="me-1">
-            <Button variant="primary" type="submit" className="btn-sm">
-              Tìm kiếm
-            </Button>
           </Col>
 
           <Col xs="auto" className="me-1">
@@ -136,6 +86,5 @@ const TrainerSearchFilter = ({ allCourts, setFilteredResults }) => {
     </div>
   );
 };
-
 
 export default TrainerSearchFilter;

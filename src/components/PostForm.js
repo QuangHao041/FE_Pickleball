@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Row, Col } from 'react-bootstrap';
+import { Button, Form, Row, Col, Alert } from 'react-bootstrap';
 import '../styles/screens/PostForm.css'; // Add your custom styles
 
 const PostForm = () => {
   const [formData, setFormData] = useState({
     trainerName: '',
     experience: '',
-    image: '',
+    images: [],
     phoneNumber: '',
-    price: '',
+    price_per_session: '',
     zaloLink: '',
     facebookLink: '',
-    rememberChoice: false,  // Add rememberChoice field
+    trainerLocation: '',
+    description: '',
+    rememberChoice: false,
+    address: '',
   });
+
+  const [submissionStatus, setSubmissionStatus] = useState({ success: false, error: null }); 
 
   // Effect to load saved data from localStorage
   useEffect(() => {
@@ -24,8 +29,15 @@ const PostForm = () => {
 
   // Handle input changes
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, type, files } = e.target;
+
+    if (type === 'file') {
+      // Handle file input for images
+      setFormData({ ...formData, [name]: [...files] });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+    console.log("Updated Post State:", { ...formData, [name]: value });
   };
 
   // Handle checkbox change
@@ -33,20 +45,88 @@ const PostForm = () => {
     setFormData({ ...formData, rememberChoice: e.target.checked });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Bạn cần đăng nhập để thực hiện hành động này.');
+      return;
+    }
+
+    // Check if remember choice is checked
     if (formData.rememberChoice) {
       localStorage.setItem('formData', JSON.stringify(formData));
     } else {
       localStorage.removeItem('formData');
     }
+
+    // Log data for testing
     console.log('Form Data Submitted:', formData);
+
+    // Prepare form data for submission
+    const data = new FormData();
+    data.append('name', formData.trainerName);
+    data.append('price_per_session', formData.price_per_session); // Correct the field name
+    data.append('address', formData.address); // Append the address field
+    data.append('contact_info[phone]', formData.phoneNumber);
+    data.append('contact_info[facebook]', formData.facebookLink);
+    data.append('description', formData.description);
+
+    // Append the file if selected
+    if (formData.images && formData.images.length > 0) {
+      formData.images.forEach((image, index) => {
+        data.append(`images`, image); // Đính kèm từng ảnh vào FormData
+      });
+    } else {
+      alert('No image selected. Please upload an image.');
+      return; // Prevent submission if no image is selected
+    }
+
+    for (let pair of data.entries()) {
+      console.log(pair[0] + ': ' + pair[1]);
+    }
+    // Send data to the API
+    try {
+      const response = await fetch('https://bepickleball.vercel.app/api/coach/add', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: data
+      });
+
+      const result = await response.json();
+      console.log('Response from API:', result);
+      console.log('Response status:', response);
+
+      if (response.ok) {
+        console.log('Form submitted successfully!');
+        setSubmissionStatus({ success: true, error: null }); // Set success status
+      } else {
+        console.error('Error in submission:', result.error);
+        setSubmissionStatus({ success: false, error: result.error }); // Set error status
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setSubmissionStatus({ success: false, error: 'An unexpected error occurred.' });
+    }
   };
 
   return (
-    <Form className="post-form" style={{backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/post-background.png)`}} onSubmit={handleSubmit}>
-      <h4 style={{textAlign: 'left'}}>Bài đăng</h4>
+    <Form className="post-form" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/post-background.png)` }} onSubmit={handleSubmit}>
+      <h4 style={{ textAlign: 'left' }}>Bài đăng</h4>
 
+      {submissionStatus.success && (
+        <Alert variant="success" onClose={() => setSubmissionStatus({ success: false, error: null })} dismissible>
+          Đăng bài thành công!
+        </Alert>
+      )}
+      {submissionStatus.error && (
+        <Alert variant="danger" onClose={() => setSubmissionStatus({ success: false, error: null })} dismissible>
+          {submissionStatus.error}
+        </Alert>
+      )}
       {/* Tên huấn luyện viên */}
       <Form.Group controlId="trainerName">
         <Form.Control
@@ -62,30 +142,23 @@ const PostForm = () => {
       {/* Trình độ và input ảnh */}
       <Row>
         <Col md={6} style={{ padding: 0 }}>
-          <Form.Group controlId="experience">
-            <Form.Select
-              name="experience"
-              value={formData.experience}
+        <Form.Group controlId="images">
+            <Form.Control
+              type="file"
+              name="images"
               onChange={handleInputChange}
               style={{ padding: 0, width: '90%' }}
-            >
-              <option value="">Chọn trình độ</option>
-              <option value="1.0">1.0-2.0</option>
-              <option value="2.5">2.5</option>
-              <option value="3.0">3.0</option>
-              <option value="3.5">3.5</option>
-              <option value="4.0">4.0</option>
-              <option value="4.5">4.5</option>
-              <option value="5.0">5.0</option>
-              <option value="5.5+">5.5+</option>
-            </Form.Select>
+              multiple
+            />
           </Form.Group>
         </Col>
         <Col md={6} style={{ padding: 0 }}>
-          <Form.Group controlId="image">
+        <Form.Group controlId="price_per_session">
             <Form.Control
-              type="file"
-              name="image"
+              type="text"
+              placeholder="Nhập giá tiền"
+              name="price_per_session"
+              value={formData.price_per_session}
               onChange={handleInputChange}
               style={{ padding: 0, width: '90%' }}
             />
@@ -108,34 +181,6 @@ const PostForm = () => {
           </Form.Group>
         </Col>
         <Col md={6} style={{ padding: 0 }}>
-          <Form.Group controlId="price">
-            <Form.Control
-              type="text"
-              placeholder="Nhập giá tiền"
-              name="price"
-              value={formData.price}
-              onChange={handleInputChange}
-              style={{ padding: 0, width: '90%' }}
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-
-      {/* Link Zalo và Facebook */}
-      <Row>
-        <Col md={6} style={{ padding: 0 }}>
-          <Form.Group controlId="zaloLink">
-            <Form.Control
-              type="text"
-              placeholder="Nhập link Zalo"
-              name="zaloLink"
-              value={formData.zaloLink}
-              onChange={handleInputChange}
-              style={{ padding: "0px", width: '90%', justifyContent: 'center' }}
-            />
-          </Form.Group>
-        </Col>
-        <Col md={6} style={{ padding: 0 }}>
           <Form.Group controlId="facebookLink">
             <Form.Control
               type="text"
@@ -148,6 +193,33 @@ const PostForm = () => {
           </Form.Group>
         </Col>
       </Row>
+
+      {/* Link Zalo và Facebook */}
+      <Row>
+        <Col style={{ padding: 0 }}>
+        <Form.Group controlId="address">
+            <Form.Control
+              type="text"
+              placeholder="Khu vực cụ thể"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              style={{ padding: 0, width: '90%' }}
+            />
+          </Form.Group>
+        </Col>
+      </Row>
+
+      <Form.Group controlId="description">
+        <Form.Control
+          type="text"
+          placeholder="Thành tích cá nhân"
+          name="description"
+          value={formData.description}
+          onChange={handleInputChange}
+          style={{ width: '90%', marginBottom: "20px" }}
+        />
+      </Form.Group>
 
       {/* Checkbox: Remember my choices */}
       <Form.Group controlId="rememberChoice">

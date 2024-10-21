@@ -17,95 +17,97 @@ const PostFormComponent = () => {
     price: '',
     phone: '',
     facebook: '',
-    image: '',
+    image: [],
     level: '<2.0', // Added default value for skill level
   });
 
   const [showModal, setShowModal] = useState(false);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, files } = e.target;
     if (name === "date") {
-      const dateValue = new Date(value);
-      setPost({ ...post, [name]: dateValue });
+        const dateValue = new Date(value);
+        setPost({ ...post, [name]: dateValue });
+    } else if (name === "image") {
+        setPost({ ...post, image: [...files] }); // Capture the first file selected
     } else {
-      setPost({ ...post, [name]: value });
+        setPost({ ...post, [name]: value });
     }
     console.log("Updated Post State:", { ...post, [name]: value });
-  };
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    const token = localStorage.getItem('token'); // Retrieve token from localStorage
+    const token = localStorage.getItem('token');
     console.log('Token:', token);
   
-    // Ensure date is formatted correctly and exists
     if (!post.date) {
-      alert('Please enter a valid date.');
-      return;
+        alert('Please enter a valid date.');
+        return;
     }
   
-    // Create a Date object from the post.date
     const dateObject = new Date(post.date);
   
-    // Check if the date is valid
     if (isNaN(dateObject)) {
-      alert('Please enter a valid date.');
-      return;
+        alert('Please enter a valid date.');
+        return;
     }
   
-    // Format date to DD-MM-YYYY
     const formattedDate = formatDate(dateObject);
-    console.log("Formatted Date:", formattedDate, "typeDate", typeof (formattedDate)); // Log formatted date
-  
-    // Validate required fields
+    console.log("Formatted Date:", formattedDate, "typeDate", typeof (formattedDate));
+
     if (!post.location || post.slots <= 0 || !post.courtType || !post.price || !post.phone) {
-      alert('Please fill in all required fields.');
-      return;
+        alert('Please fill in all required fields.');
+        return;
     }
   
-    // Create reqBody as a JSON object
-
-    const reqBody = {
-      court_name: post.name,
-      location: post.location,
-      total_players: post.slots,
-      court_type: post.courtType,
-      players_needed: post.slots,
-      skill_level: post.level,
-      play_date: formattedDate,
-      cost: post.price,
-      play_time: post.playTime,
-      contact_info: `SĐT: ${post.phone}, Facebook: ${post.facebook}`
-    };
-  
-    console.log( JSON.stringify(reqBody));
+    // Create a FormData object to send form data and file
+    const formData = new FormData();
+    formData.append("court_name", post.name);
+    formData.append("location", post.location);
+    formData.append("total_players", post.slots);
+    formData.append("court_type", post.courtType);
+    formData.append("players_needed", post.memberSlots);
+    formData.append("skill_level", post.level);
+    formData.append("play_date", formattedDate);
+    formData.append("cost", post.price);
+    formData.append("play_time", post.playTime);
+    formData.append("contact_info", `SĐT: ${post.phone}, Facebook: ${post.facebook}`);
+    
+    // Append the image file (the actual file, not the path)
+    if (post.image.length > 0) {
+      post.image.forEach((image, index) => {
+        formData.append(`images`, image); // Multiple images can be appended with the same key
+      });
+    } else {
+      alert('Please upload at least one image.');
+      return;
+    }
   
     try {
-      const response = await fetch("https://bepickleball.vercel.app/api/post/create", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json', // Set Content-Type header to JSON
-          'Authorization': `Bearer ${token}`, // Use the token in the Authorization header
-        },
-        body: JSON.stringify(reqBody), // Send the reqBody as JSON
-      });
+        const response = await fetch("https://bepickleball.vercel.app/api/post/create", {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`, // Only authorization header
+            },
+            body: formData, // Use FormData as the body
+        });
+        console.log("-------", response);
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Response Error:', errorData);
+            alert(`${errorData.error}`);
+            return;
+        }
   
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Response Error:', errorData); // Log error response
-        alert(`${errorData.error}`);
-        return;
-      }
-  
-      const result = await response.json();
-      setShowModal(true); // Show modal on success
+        const result = await response.json();
+        setShowModal(true); // Show modal on success
     } catch (error) {
-      console.error(error);
-      alert('Có lỗi xảy ra khi đăng bài!');
+        console.error(error);
+        alert('Có lỗi xảy ra khi đăng bài!');
     }
-  };
+};
 
 
   // Utility function to format Date object to DD-MM-YYYY
@@ -261,14 +263,56 @@ const PostFormComponent = () => {
                       </Form.Group>
 
                       <Form.Group controlId="playTime" style={{ width: '90%', textAlign: 'center' }}>
-                        <Form.Label>Thời gian chơi (bắt buộc)</Form.Label>
+                        <Form.Label>Thời gian bắt đầu</Form.Label>
                         <Form.Control as="select" name="playTime" onChange={handleInputChange}>
-                          <option value="5h-7h">5h-7h</option>
-                          <option value="7h-10h">7h-10h</option>
-                          <option value="10h-13h">10h-13h</option>
-                          <option value="13h-16h">13h-16h</option>
-                          <option value="16h-19h">16h-19h</option>
-                          <option value="19h-21h">19h-21h</option>
+                        <option value="00:00">00:00</option>
+  <option value="00:30">00:30</option>
+  <option value="01:00">01:00</option>
+  <option value="01:30">01:30</option>
+  <option value="02:00">02:00</option>
+  <option value="02:30">02:30</option>
+  <option value="03:00">03:00</option>
+  <option value="03:30">03:30</option>
+  <option value="04:00">04:00</option>
+  <option value="04:30">04:30</option>
+  <option value="05:00">05:00</option>
+  <option value="05:30">05:30</option>
+  <option value="06:00">06:00</option>
+  <option value="06:30">06:30</option>
+  <option value="07:00">07:00</option>
+  <option value="07:30">07:30</option>
+  <option value="08:00">08:00</option>
+  <option value="08:30">08:30</option>
+  <option value="09:00">09:00</option>
+  <option value="09:30">09:30</option>
+  <option value="10:00">10:00</option>
+  <option value="10:30">10:30</option>
+  <option value="11:00">11:00</option>
+  <option value="11:30">11:30</option>
+  <option value="12:00">12:00</option>
+  <option value="12:30">12:30</option>
+  <option value="13:00">13:00</option>
+  <option value="13:30">13:30</option>
+  <option value="14:00">14:00</option>
+  <option value="14:30">14:30</option>
+  <option value="15:00">15:00</option>
+  <option value="15:30">15:30</option>
+  <option value="16:00">16:00</option>
+  <option value="16:30">16:30</option>
+  <option value="17:00">17:00</option>
+  <option value="17:30">17:30</option>
+  <option value="18:00">18:00</option>
+  <option value="18:30">18:30</option>
+  <option value="19:00">19:00</option>
+  <option value="19:30">19:30</option>
+  <option value="20:00">20:00</option>
+  <option value="20:30">20:30</option>
+  <option value="21:00">21:00</option>
+  <option value="21:30">21:30</option>
+  <option value="22:00">22:00</option>
+  <option value="22:30">22:30</option>
+  <option value="23:00">23:00</option>
+  <option value="23:30">23:30</option>
                         </Form.Control>
                       </Form.Group>
 

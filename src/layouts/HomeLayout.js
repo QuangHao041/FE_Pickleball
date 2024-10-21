@@ -34,6 +34,7 @@ const HomeLayout = () => {
       behavior: 'smooth',
     });
   };
+
   return (
     <div className="home-layout" style={{ backgroundColor: "#F0F0F0" }}>
       {/* Header Section */}
@@ -52,7 +53,7 @@ const HomeLayout = () => {
             <ParticipationComponent />
 
             {/* Coach List Section */}
-            <CoachListComponent />
+            <CoachListComponent limit={8} enablePagination={false} />
 
             <Link
               to="/coach"
@@ -78,7 +79,7 @@ const HomeLayout = () => {
       {/* Back to top button */}
       {showScrollButton && (
         <button className="scroll-to-top" onClick={scrollToTop}>
-          <FaArrowUp   size={24} />
+          <FaArrowUp size={24} />
         </button>
       )}
     </div>

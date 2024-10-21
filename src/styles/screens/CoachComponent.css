@@ -30,7 +30,7 @@
   border-top-right-radius: 10px;
   height: 170px;
   width: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .top-left-badge {
@@ -59,10 +59,11 @@
   border-radius: 30px;
 }
 
-.price-text {
-  color: green;
-  font-weight: bold;
-  padding: 0;
+#price-text {
+  color: #059A8F;
+  font-weight: 540;
+  font-size: 19px;
+  padding-top: 10px;
 }
 
 .contact-buttons .contact-btn {

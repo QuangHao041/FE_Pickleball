@@ -11,7 +11,7 @@ const CourtListComponent = () => {
   useEffect(() => {
     const fetchCourts = async () => {
       try {
-        const response = await fetch('https://bepickleball.vercel.app/api/post'); // Địa chỉ API của bạn
+        const response = await fetch('https://bepickleball.vercel.app/api/post/future'); // Địa chỉ API của bạn
         if (!response.ok) {
           throw new Error('Failed to fetch');
         }
@@ -46,13 +46,19 @@ const CourtListComponent = () => {
         {randomCourts.map((court) => (
           <Col key={court._id} md={4} style={{ padding: 0 }}>
             <CourtComponent
-              name={court.court_address}
+              name={court.court_name}
               price={court.cost}
-              slots={court.total_players} // Bạn có thể cần điều chỉnh này tùy theo yêu cầu
-              location={court.court_address}
+              slots={court.total_players}
+              location={court.location}
               type={court.court_type}
-              level={parseFloat(court.skill_level)} // Chuyển đổi skill level thành float
-              image={court.images[0]}
+              level={parseFloat(court.skill_level)}
+              images={court.images}
+              players_needed={court.players_needed}
+              applied_players={court.applied_players}
+              date={court.play_date}
+              time={court.play_time}
+              contact_info={court.contact_info}
+              applied_count={court.applied_count}
               style={{ width: "100%", alignItems: 'center', justifyContent: 'center', textAlign: "center" }}
             />
           </Col>

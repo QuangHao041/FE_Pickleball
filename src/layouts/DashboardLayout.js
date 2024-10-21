@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CategoriesSidebar from '../components/CategoriesSidebar';
 import PostList from '../components/PostList';
 import PostForm from '../components/PostForm';
+import CoachList from '../components/CoachList';
 
 const DashboardLayout = () => {
   const [selectedCategory, setSelectedCategory] = useState('Bài giao lưu');
@@ -59,6 +60,8 @@ const DashboardLayout = () => {
       <div className="content">
         {selectedCategory === 'Bài giao lưu' ? (
           <PostList posts={posts} />
+        ) : selectedCategory === 'Xem Huấn luyện viên' ? (
+          <CoachList /> // Hiển thị danh sách huấn luyện viên
         ) : (
           <PostForm />
         )}

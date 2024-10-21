@@ -31,6 +31,10 @@ import DashboardLayout from './layouts/DashboardLayout';
 import Admin from './layouts/Admin';
 import CourtRegistrationList from './components/CourtRegistrationList';
 import { NotificationProvider } from './components/NotificationContext';
+import CoachDetailComponent from './components/CoachDetailComponent';
+import CoachDetailLayout from './layouts/CoachDetailLayout';
+import CourtRegistrationLayout from './layouts/CourtRegistrationLayout';
+
 
 function App() {
   return (
@@ -49,9 +53,10 @@ function App() {
           <Route path="/court/court-detail" element={<CourtDetailLayout />} />
           <Route path="/post-form" element={<PostFormLayout />} />
           <Route path="/coach" element={<CoachLayout />} />
+          <Route path="/coach/coach-detail" element={<CoachDetailLayout />} />
           <Route path="/dashboard" element={<DashboardLayout />} />
           <Route path="/admin" element={<Admin />} />
-          <Route path="/court-registration-list" element={<CourtRegistrationList />} />
+          <Route path="/court-registration-list" element={<CourtRegistrationLayout />} />
           <Route path="/" element={<HomeLayout></HomeLayout>} />
         </Routes>
       </Router>
